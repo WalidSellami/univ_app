@@ -59,4 +59,20 @@ class DioHelper{
 
   }
 
+  static Future<Response?> deleteData({
+    required String url,
+    Map<String , dynamic>? data,
+    Map<String , dynamic>? query,
+    String? token,
+  }) async{
+
+    dio?.options.headers = {
+      'Authorization' : token,
+    };
+
+
+    return await dio?.delete(url);
+
+  }
+
 }

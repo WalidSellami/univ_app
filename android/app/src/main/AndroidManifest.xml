@@ -1,6 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.second_app">
-   <application
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
+            <data android:scheme="mailto" />
+        </intent>
+    </queries>
+    <application
         android:label="ViVa"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
@@ -32,3 +39,5 @@
             android:value="2" />
     </application>
 </manifest>
+
+

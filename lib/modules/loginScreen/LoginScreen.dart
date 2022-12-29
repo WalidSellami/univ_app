@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:second_app/layout/appLayout/MainScreen.dart';
+import 'package:second_app/modules/forgotScreen/ForgotPassword.dart';
 import 'package:second_app/modules/loginScreen/cubit/Cubit.dart';
 import 'package:second_app/modules/loginScreen/cubit/States.dart';
 import 'package:second_app/modules/registerScreen/RegisterScreen.dart';
 import 'package:second_app/shared/components/Components.dart';
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:second_app/shared/components/Constant.dart';
+import 'package:second_app/shared/network/local/CacheHelper.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -30,7 +35,31 @@ class _LoginScreenState extends State<LoginScreen> {
     return BlocProvider(
       create: (BuildContext context) => LoginCubit(),
       child: BlocConsumer<LoginCubit, LoginStates>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if(state is LoginSuccessState){
+            if(state.login.status == true){
+
+              print(state.login.message);
+              print(state.login.data?.original?.token);
+
+              showToast(message: '${state.login.message}', state: ToastStates.success);
+              CacheHelper.saveData(key: 'token', value: state.login.data?.original?.token).then((value) {
+                token = state.login.data?.original?.token;
+
+                CacheHelper.saveData(key: 'id', value: state.login.user?.id).then((value) {
+                  id = state.login.user?.id;
+                });
+
+                navigatorToNotBack(context: context, screen: MainScreen());
+              });
+
+            }else{
+
+              showToast(message: '${state.login.message}', state: ToastStates.error);
+
+            }
+          }
+        },
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
@@ -106,8 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               validate: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Password must not be empty';
-                                }
-                                if (value.length < 8) {
+                                }else if (value.length < 8) {
                                   return 'Password must be at least 8 characters';
                                 }
                                 return null;
@@ -115,23 +143,34 @@ class _LoginScreenState extends State<LoginScreen> {
                           const SizedBox(
                             height: 30.0,
                           ),
-                          defaultButton(
-                              text: 'login',
-                              function: () {
-                                if (formKey.currentState!.validate()) {
-                                  print(emailController.text);
-                                  print(passwordController.text);
-                                }
-                              },
-                              colorText: Colors.white,
-                              context: context),
+                          ConditionalBuilder(
+                            condition: state is! LoginLoadingState,
+                            builder: (context) => defaultButton(
+                                text: 'login',
+                                function: () {
+                                  if (formKey.currentState!.validate()) {
+                                     LoginCubit.get(context).userLogin(
+                                         email: emailController.text,
+                                         password: passwordController.text);
+
+                                    print(emailController.text);
+                                    print(passwordController.text);
+                                  }
+                                },
+                                colorText: Colors.white,
+                                context: context),
+                            fallback: (context) => Center(child: CircularProgressIndicator(color: Colors.blue.shade700,)),
+
+                          ),
                           const SizedBox(
                             height: 20.0,
                           ),
                           Align(
                             alignment: AlignmentDirectional.center,
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                navigatorTo(context: context, screen: const ForgotPassword());
+                              },
                               child: Text(
                                 'Forgot your password?',
                                 style: TextStyle(

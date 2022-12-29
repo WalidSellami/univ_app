@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:second_app/layout/appLayout/MainScreen.dart';
 import 'package:second_app/modules/registerScreen/cubit/Cubit.dart';
 import 'package:second_app/modules/registerScreen/cubit/States.dart';
 import 'package:second_app/shared/components/Components.dart';
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:second_app/shared/components/Constant.dart';
+import 'package:second_app/shared/network/local/CacheHelper.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -35,7 +39,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return BlocProvider(
       create: (BuildContext context) => RegisterCubit(),
       child: BlocConsumer<RegisterCubit , RegisterStates>(
-        listener: (context , state){},
+        listener: (context , state){
+          if(state is RegisterSuccessState){
+            if(state.register.status == true){
+              print(state.register.message);
+              print(state.register.data?.original?.token);
+
+              showToast(message: '${state.register.message}', state: ToastStates.success);
+              CacheHelper.saveData(key: 'token', value: '${state.register.data?.original?.token}').then((value) {
+
+                token = state.register.data?.original?.token;
+
+                CacheHelper.saveData(key: 'id', value: '${state.register.user?.id}').then((value) {
+                  id = state.register.user?.id;
+                });
+
+                navigatorToNotBack(context: context, screen: MainScreen());
+
+              });
+
+            }else{
+
+              showToast(message: '${state.register.message}', state: ToastStates.error);
+
+            }
+          }
+        },
         builder: (context , state){
           return Scaffold(
             appBar: AppBar(
@@ -164,20 +193,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         const SizedBox(
                           height: 30.0,
                         ),
-                        defaultButton(
-                            text: 'register',
-                            function: (){
-                              if(formKey.currentState!.validate()){
+                        ConditionalBuilder(
+                          condition: state is! RegisterLoadingState,
+                          builder: (context) =>  defaultButton(
+                              text: 'register',
+                              function: (){
+                                if(formKey.currentState!.validate()){
+                                   RegisterCubit.get(context).userRegister(
+                                       firstName: fNameController.text,
+                                       lastName: lNameController.text,
+                                       email: emailController.text,
+                                       password: passwordController.text);
 
+                                  print(emailController.text);
+                                  print(passwordController.text);
+                                }
 
+                              },
+                              colorText: Colors.white,
+                              context: context),
+                          fallback: (context) => Center(child: CircularProgressIndicator(color: Colors.blue.shade700,)),
 
-                                print(emailController.text);
-                                print(passwordController.text);
-                              }
-
-                            },
-                            colorText: Colors.white,
-                            context: context),
+                        ),
                       ],
                     ),
                   ),

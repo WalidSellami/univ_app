@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 Widget defaultFormField({
   required String text,
@@ -37,6 +38,39 @@ Widget defaultFormField({
   ),
   validator: validate,
 );
+
+
+// TextFormField without prefix icon we use it on HomeScreen (Fill The Form)
+Widget defaultSimpleFormField({
+  required String text,
+  required TextEditingController controller,
+  required TextInputType type,
+  required String? Function(String?)? validate,
+  String? helperText,
+}) => TextFormField(
+  controller: controller,
+  keyboardType: type,
+  style: const TextStyle(
+    fontWeight: FontWeight.bold,
+  ),
+  decoration: InputDecoration(
+    label: Text(
+      text,
+    ),
+    helperText: helperText,
+    helperStyle: const TextStyle(
+      color: Colors.red,
+    ),
+    border: OutlineInputBorder(
+      borderSide: const BorderSide(
+        width: 2.0,
+      ),
+      borderRadius: BorderRadius.circular(8.0),
+    ),
+  ),
+  validator: validate,
+);
+
 
 Widget defaultTextButton({
   required String text,
@@ -83,10 +117,11 @@ Widget defaultButton({
       ),
     );
 
-
+// Navigator to another screen and we can return to precedent screen
 Future navigatorTo({required BuildContext context, required Widget screen}) =>
     Navigator.push(context, MaterialPageRoute(builder: (context) => screen));
 
+// Navigator to another screen and we can't return to precedent screen (we use it on LoginScreen , RegisterScreen ...)
 Future navigatorToNotBack(
     {required BuildContext context, required Widget screen}) =>
     Navigator.pushAndRemoveUntil(
@@ -94,3 +129,41 @@ Future navigatorToNotBack(
       MaterialPageRoute(builder: (context) => screen),
           (route) => false,
     );
+
+// Simple notification
+void showToast({
+  required String message,
+  required ToastStates state,
+}) =>
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 5,
+      backgroundColor: chooseToastColor(s: state),
+      textColor: Colors.white,
+      fontSize: 17.0,
+    );
+
+// States of notification
+enum ToastStates {success , error , warning}
+
+Color chooseToastColor({
+  required ToastStates s,
+}) {
+  Color? color;
+  switch (s) {
+    case ToastStates.success:
+      color = Colors.teal;
+      break;
+    case ToastStates.error:
+      color = Colors.red;
+      break;
+    case ToastStates.warning:
+      color = Colors.amber;
+      break;
+  }
+  return color;
+}
+
+
