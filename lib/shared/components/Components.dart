@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:second_app/layout/darkMode/cubit/Cubit.dart';
 
 Widget defaultFormField({
   required String text,
@@ -75,6 +77,7 @@ Widget defaultSimpleFormField({
 Widget defaultTextButton({
   required String text,
   required Function onPressed,
+  context,
 }) => TextButton(
     onPressed: (){
      onPressed();
@@ -84,7 +87,7 @@ Widget defaultTextButton({
       style: TextStyle(
         fontWeight: FontWeight.bold,
         fontSize: 16.5,
-        color: Colors.blue.shade700,
+        color: ThemeCubit.get(context).isDark ?  HexColor('35c2c2') : Colors.blue.shade700,
       ),
     ),
 );
@@ -108,7 +111,7 @@ Widget defaultButton({
         onPressed: () {
           function();
         },
-        color: Colors.blue.shade700,
+        color: ThemeCubit.get(context).isDark ? HexColor('198989') : Colors.blue.shade700,
         child: Text(
           text.toUpperCase(),
           style: TextStyle(
@@ -150,11 +153,12 @@ enum ToastStates {success , error , warning}
 
 Color chooseToastColor({
   required ToastStates s,
+  context,
 }) {
   Color? color;
   switch (s) {
     case ToastStates.success:
-      color = Colors.teal;
+     color = HexColor('198989');
       break;
     case ToastStates.error:
       color = Colors.red;
@@ -165,5 +169,32 @@ Color chooseToastColor({
   }
   return color;
 }
+
+
+Widget defaultElevatedButton({
+  required String text,
+  required Function onPress,
+  Color? color,
+}) => ElevatedButton(
+    onPressed: (){
+      onPress();
+    },
+  style: ButtonStyle(
+    backgroundColor: MaterialStatePropertyAll(
+      color,
+    ),
+    minimumSize: const MaterialStatePropertyAll(
+      Size(120 , 45),
+    )
+  ),
+    child: Text(
+      text,
+      style: const TextStyle(
+        fontSize: 18.5,
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+ );
 
 

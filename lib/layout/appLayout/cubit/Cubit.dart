@@ -6,7 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:second_app/endPoints.dart';
 import 'package:second_app/layout/appLayout/cubit/States.dart';
 import 'package:second_app/models/changeModel/ChangePassModel.dart';
+import 'package:second_app/models/createProjectModel/CreateProjectModel.dart';
 import 'package:second_app/models/deleteModel/DeleteModel.dart';
+import 'package:second_app/models/detailsModel/DetailsModel.dart';
+import 'package:second_app/models/loginModel/LoginModel.dart';
 import 'package:second_app/models/profileModel/ProfileModel.dart';
 import 'package:second_app/models/updateProfileModel/UpdateModel.dart';
 import 'package:second_app/modules/homeScreen/HomeScreen.dart';
@@ -61,6 +64,50 @@ class AppCubit extends Cubit<AppStates>{
   }
 
 
+  bool isHide1 = true;
+  bool isHide2 = true;
+  bool isHide3 = true;
+  bool isHide4 = true;
+  bool isHide5 = true;
+  bool isHide6 = true;
+  bool isHide7 = true;
+
+
+  void showFullText1(){
+    isHide1 = !isHide1;
+    emit(ShowFullTextAppState());
+  }
+
+  void showFullText2(){
+    isHide2 = !isHide2;
+    emit(ShowFullTextAppState());
+  }
+
+  void showFullText3(){
+    isHide3 = !isHide3;
+    emit(ShowFullTextAppState());
+  }
+
+  void showFullText4(){
+    isHide4 = !isHide4;
+    emit(ShowFullTextAppState());
+  }
+
+  void showFullText5(){
+    isHide5 = !isHide5;
+    emit(ShowFullTextAppState());
+  }
+
+  void showFullText6(){
+    isHide5 = !isHide5;
+    emit(ShowFullTextAppState());
+  }
+
+  void showFullText7(){
+    isHide5 = !isHide5;
+    emit(ShowFullTextAppState());
+  }
+
 
   ProfileModel? profile;
   UpdateModel? update;
@@ -75,7 +122,7 @@ class AppCubit extends Cubit<AppStates>{
     ).then((value) {
       // print(value?.data);
       profile = ProfileModel.fromJson(value?.data);
-      id = profile?.id;
+      // print(profile?.firstName);
       emit(SuccessProfileAppState(profile!));
 
     }).catchError((error){
@@ -139,12 +186,11 @@ class AppCubit extends Cubit<AppStates>{
     });
   }
 
-
   void deleteAccount(){
     emit(LoadingDeleteAccountAppState());
     DioHelper.deleteData(
         url: '/api/delete/$id',
-        token: token,
+        token: 'Bearer $token',
     ).then((value) {
 
       delete = DeleteModel.fromJson(value?.data);

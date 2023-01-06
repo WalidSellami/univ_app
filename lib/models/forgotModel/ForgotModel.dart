@@ -18,7 +18,7 @@ class UserData {
   String? email;
 
   UserData.fromJson(Map<String , dynamic>json){
-    id = json['id'];
+    id = json['user_id'];
     firstName = json['first_name'];
     lastName = json['last_name'];
     email = json['email'];

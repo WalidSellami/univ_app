@@ -44,7 +44,19 @@ dependencies:
   hexcolor: ^3.0.1
   conditional_builder_null_safety: ^0.0.6
   flutter_spinkit: ^5.1.0
-#  flutter_email_sender: ^5.2.0
+
+  #send with emailapp
+  flutter_email_sender: ^5.2.0
+
+  #create pdf document
+  pdf: ^3.8.4
+  #save file
+  path_provider: ^2.0.11
+  #open pdf document
+  open_file: ^3.2.1
+
+  internet_connection_checker: ^1.0.0+1
+  overlay_support: ^2.1.0
   flutter_launcher_icons: "^0.11.0"
 
 flutter_icons:
@@ -78,7 +90,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/viva.png
-  #    - images/a_dot_ham.jpeg
+    - fonts/VarelaRound-Regular.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

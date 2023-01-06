@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:second_app/layout/darkMode/cubit/Cubit.dart';
 import 'package:second_app/modules/loginScreen/LoginScreen.dart';
 import 'package:second_app/modules/splashScreen/cubit/Cubit.dart';
 import 'package:second_app/modules/splashScreen/cubit/States.dart';
@@ -43,10 +44,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           return Scaffold(
             appBar: AppBar(
               elevation: 0,
-              systemOverlayStyle: const SystemUiOverlayStyle(
-                statusBarColor: Colors.white,
-                statusBarIconBrightness: Brightness.dark,
-              ),
+              backgroundColor: ThemeCubit.get(context).isDark ? Colors.grey.shade900 : Colors.white,
+              // systemOverlayStyle: const SystemUiOverlayStyle(
+              //   statusBarColor: Colors.white,
+              //   statusBarIconBrightness: Brightness.dark,
+              // ),
             ),
             body: Column(
               mainAxisAlignment: MainAxisAlignment.center,

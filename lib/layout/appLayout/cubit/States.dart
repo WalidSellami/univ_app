@@ -1,5 +1,7 @@
 import 'package:second_app/models/changeModel/ChangePassModel.dart';
+import 'package:second_app/models/createProjectModel/CreateProjectModel.dart';
 import 'package:second_app/models/deleteModel/DeleteModel.dart';
+import 'package:second_app/models/detailsModel/DetailsModel.dart';
 import 'package:second_app/models/profileModel/ProfileModel.dart';
 import 'package:second_app/models/updateProfileModel/UpdateModel.dart';
 
@@ -13,6 +15,8 @@ class ShowBottomSheetAppState extends AppStates {}
 
 class ChangeTitleAppState extends AppStates {}
 
+
+class ShowFullTextAppState extends AppStates {}
 
 
 class LoadingProfileAppState extends AppStates {}
@@ -51,6 +55,18 @@ class SuccessChangePassAppState extends AppStates {
 class ErrorChangePassAppState extends AppStates {
   final String error;
   ErrorChangePassAppState(this.error);
+}
+
+
+class LoadingLogOutAppState extends AppStates {}
+
+class SuccessLogOutAppState extends AppStates {
+
+}
+
+class ErrorLogOutAppState extends AppStates {
+  final String error;
+  ErrorLogOutAppState(this.error);
 }
 
 

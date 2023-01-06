@@ -71,7 +71,7 @@ class DioHelper{
     };
 
 
-    return await dio?.delete(url);
+    return await dio?.delete(url , data: data , queryParameters: query);
 
   }
 

@@ -7,6 +7,11 @@ int? id;
 
 var emailCnt = TextEditingController();
 
+var subjectController = TextEditingController();
+
+var messageController = TextEditingController();
+
+int? projectId;
 
 // Padding(
 //   padding: const EdgeInsets.all(8.0),
